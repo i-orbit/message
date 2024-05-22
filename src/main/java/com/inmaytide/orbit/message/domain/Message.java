@@ -1,12 +1,10 @@
 package com.inmaytide.orbit.message.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.inmaytide.orbit.commons.domain.FileMeta;
 import com.inmaytide.orbit.commons.domain.FileMetadata;
 import com.inmaytide.orbit.commons.domain.pattern.TombstoneEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
