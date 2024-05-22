@@ -11,7 +11,7 @@
             </column>
             <column name="title" type="varchar(200)" remarks="消息标题"/>
             <column name="content" type="varchar(500)" remarks="消息内容"/>
-            <column name="category" type="varchar(20)" remarks="消息业务分类"/>
+            <column name="business" type="varchar(20)" remarks="消息业务分类"/>
             <column name="url" type="varchar(500)" remarks="消息链接URL"/>
             <column name="created_time" type="timestamp" remarks="创建时间"/>
             <column name="created_by" type="bigint" remarks="创建人"/>

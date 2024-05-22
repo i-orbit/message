@@ -18,4 +18,5 @@ public interface ReceiverService extends BasicService<MessageReceiver> {
     Map<Long, List<MessageReceiver>> findByMessages(List<Long> messageIds);
 
     Map<Long, List<MessageReceiver>> findUnsentByMessages(MessageSendingMode sendingMode, List<Long> messageIds);
+
 }

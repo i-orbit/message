@@ -2,6 +2,7 @@ package com.inmaytide.orbit.message.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.inmaytide.orbit.commons.domain.FileMeta;
+import com.inmaytide.orbit.commons.domain.FileMetadata;
 import com.inmaytide.orbit.commons.domain.pattern.TombstoneEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -19,12 +20,12 @@ public class Message extends TombstoneEntity {
 
     private String content;
 
-    private String category;
+    private String business;
 
     private String url;
 
     @TableField(exist = false)
-    private List<FileMeta> attachments;
+    private List<FileMetadata> attachments;
 
     public String getTitle() {
         return title;
@@ -42,12 +43,12 @@ public class Message extends TombstoneEntity {
         this.content = content;
     }
 
-    public String getCategory() {
-        return category;
+    public String getBusiness() {
+        return business;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setBusiness(String business) {
+        this.business = business;
     }
 
     public String getUrl() {
@@ -58,11 +59,11 @@ public class Message extends TombstoneEntity {
         this.url = url;
     }
 
-    public List<FileMeta> getAttachments() {
+    public List<FileMetadata> getAttachments() {
         return attachments;
     }
 
-    public void setAttachments(List<FileMeta> attachments) {
+    public void setAttachments(List<FileMetadata> attachments) {
         this.attachments = attachments;
     }
 }

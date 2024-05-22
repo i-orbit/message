@@ -1,7 +1,7 @@
 package com.inmaytide.orbit.message.timer;
 
 import com.inmaytide.orbit.commons.constants.MessageSendingMode;
-import com.inmaytide.orbit.commons.metrics.AbstractJob;
+import com.inmaytide.orbit.commons.metrics.JobAdapter;
 import com.inmaytide.orbit.message.service.ExternalMessageSender;
 import com.inmaytide.orbit.message.service.MessageService;
 import com.inmaytide.orbit.message.service.dto.MessageVO;
@@ -16,7 +16,7 @@ import java.util.List;
  * @author inmaytide
  * @since 2024/3/6
  */
-public class MailMessageSender extends AbstractJob {
+public class MailMessageSender implements JobAdapter {
 
     private final Logger log = LoggerFactory.getLogger(MailMessageSender.class);
 
@@ -35,11 +35,11 @@ public class MailMessageSender extends AbstractJob {
 
     @Override
     public String getName() {
-        return "mail-message-sender";
+        return "sender_mail-message";
     }
 
     @Override
-    protected void exec(JobExecutionContext context) {
+    public void exec(JobExecutionContext context) {
         List<MessageVO> messages = messageService.findUnsentMessages(SUPPORTED_SENDING_MODE);
         senders.stream()
                 .filter(e -> e.support(SUPPORTED_SENDING_MODE))

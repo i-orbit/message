@@ -3,10 +3,9 @@ package com.inmaytide.orbit.message.service.impl;
 import com.inmaytide.orbit.commons.constants.Constants;
 import com.inmaytide.orbit.commons.constants.MessageSendingMode;
 import com.inmaytide.orbit.commons.constants.MessageSendingStatus;
-import com.inmaytide.orbit.commons.domain.FileMeta;
+import com.inmaytide.orbit.commons.domain.FileMetadata;
 import com.inmaytide.orbit.commons.service.library.SystemPropertyService;
 import com.inmaytide.orbit.commons.service.uaa.UserService;
-import com.inmaytide.orbit.commons.utils.CodecUtils;
 import com.inmaytide.orbit.message.configuration.ErrorCode;
 import com.inmaytide.orbit.message.domain.MessageReceiver;
 import com.inmaytide.orbit.message.service.ExternalMessageSender;
@@ -20,7 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -76,7 +74,7 @@ public class MailMessageSender implements ExternalMessageSender {
             return;
         }
         // 验证消息接收人中邮件信息的配置情况
-        Map<Long, String> emailAddresses = userService.findEmailsWithIds(receivers);
+        Map<Long, String> emailAddresses = userService.findEmailsByIds(receivers);
         List<MessageReceiver> failedReceivers = message.getReceivers().stream()
                 .filter(e -> e.getSendingMode() == MessageSendingMode.MAIL)
                 .filter(e -> StringUtils.isBlank(emailAddresses.get(e.getReceiver())))
@@ -135,7 +133,7 @@ public class MailMessageSender implements ExternalMessageSender {
             multipart.addBodyPart(body);
 
             if (CollectionUtils.isNotEmpty(message.getAttachments())) {
-                for (FileMeta fileMeta : message.getAttachments()) {
+                for (FileMetadata metadata : message.getAttachments()) {
                     MimeBodyPart attachPart = new MimeBodyPart();
                     try {
                         attachPart.attachFile(new File("/Users/inmaytide/Downloads/你啊活动佛为哦人家.txt"));
