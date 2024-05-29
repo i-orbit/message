@@ -4,7 +4,7 @@ import com.inmaytide.orbit.commons.constants.Constants;
 import com.inmaytide.orbit.commons.constants.MessageSendingMode;
 import com.inmaytide.orbit.commons.constants.MessageSendingStatus;
 import com.inmaytide.orbit.commons.domain.FileMetadata;
-import com.inmaytide.orbit.commons.service.library.SystemPropertyService;
+import com.inmaytide.orbit.commons.service.core.SystemPropertyService;
 import com.inmaytide.orbit.commons.service.uaa.UserService;
 import com.inmaytide.orbit.message.configuration.ErrorCode;
 import com.inmaytide.orbit.message.domain.MessageReceiver;
