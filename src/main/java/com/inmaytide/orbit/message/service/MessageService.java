@@ -22,6 +22,4 @@ public interface MessageService extends BasicService<Message> {
      */
     List<MessageVO> findUnsentMessages(MessageSendingMode sendingMode);
 
-    PageResult<Message> findMyMessages(MyMessagePagingQuery query);
-
 }

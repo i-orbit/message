@@ -33,8 +33,8 @@ public class MessageResource {
 
     @GetMapping
     @Operation(summary = "分页查询我的系统消息")
-    public PageResult<Message> findMyMessages(@ModelAttribute MyMessagePagingQuery query) {
-        return service.findMyMessages(query);
+    public PageResult<Message> pagination(@ModelAttribute MyMessagePagingQuery query) {
+        return service.pagination(query);
     }
 
 }

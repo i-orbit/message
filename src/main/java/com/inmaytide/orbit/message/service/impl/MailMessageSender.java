@@ -82,7 +82,7 @@ public class MailMessageSender implements ExternalMessageSender {
                 .toList();
         // 保存因用户信息邮件地址未配置导致的消息发送失败信息
         if (!failedReceivers.isEmpty()) {
-            receiverService.updateBatchById(failedReceivers);
+            failedReceivers.forEach(receiverService::update);
         }
         if (MapUtils.isEmpty(emailAddresses)) {
             log.warn("邮件消息{id = {}}接收人中没有用户信息中配置有邮箱地址", message.getId());
@@ -100,7 +100,7 @@ public class MailMessageSender implements ExternalMessageSender {
             sendableReceivers.forEach(r -> onSendFailed(r, "消息发送失败，请查看详细日志"));
         }
         if (!sendableReceivers.isEmpty()) {
-            receiverService.updateBatchById(sendableReceivers);
+            sendableReceivers.forEach(receiverService::update);
         }
     }
 

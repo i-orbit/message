@@ -1,12 +1,8 @@
 package com.inmaytide.orbit.message.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.inmaytide.exception.web.BadRequestException;
-import com.inmaytide.orbit.commons.business.impl.BasicServiceImpl;
 import com.inmaytide.orbit.commons.constants.MessageSendingMode;
-import com.inmaytide.orbit.commons.domain.dto.result.PageResult;
 import com.inmaytide.orbit.commons.domain.pattern.Entity;
 import com.inmaytide.orbit.message.configuration.ApplicationProperties;
 import com.inmaytide.orbit.message.configuration.ErrorCode;
@@ -16,7 +12,6 @@ import com.inmaytide.orbit.message.mapper.MessageMapper;
 import com.inmaytide.orbit.message.service.MessageService;
 import com.inmaytide.orbit.message.service.ReceiverService;
 import com.inmaytide.orbit.message.service.dto.MessageVO;
-import com.inmaytide.orbit.message.service.dto.MyMessagePagingQuery;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,29 +21,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.inmaytide.orbit.commons.constants.MessageSendingStatus.*;
+import static com.inmaytide.orbit.commons.constants.MessageSendingStatus.FAILED;
+import static com.inmaytide.orbit.commons.constants.MessageSendingStatus.UNSENT;
 
 /**
  * @author inmaytide
  * @since 2024/2/28
  */
 @Service
-public class MessageServiceImpl extends BasicServiceImpl<MessageMapper, Message> implements MessageService {
+public class MessageServiceImpl implements MessageService {
+
+    private final MessageMapper baseMapper;
 
     private final ApplicationProperties properties;
 
     private final ReceiverService receiverService;
 
-    public MessageServiceImpl(ApplicationProperties properties, ReceiverService receiverService) {
+    public MessageServiceImpl(MessageMapper baseMapper, ApplicationProperties properties, ReceiverService receiverService) {
+        this.baseMapper = baseMapper;
         this.properties = properties;
         this.receiverService = receiverService;
-    }
-
-    @Override
-    public PageResult<Message> findMyMessages(MyMessagePagingQuery query) {
-        try (Page<Message> p = PageHelper.startPage(query.getPageNumber(), query.getPageSize())) {
-            return PageResult.with(p.doSelectPageInfo(() -> baseMapper.selectList(query.toWrapper())));
-        }
     }
 
     @Override
@@ -69,5 +61,10 @@ public class MessageServiceImpl extends BasicServiceImpl<MessageMapper, Message>
         List<Message> messages = baseMapper.selectList(wrapper);
         Map<Long, List<MessageReceiver>> receivers = receiverService.findUnsentByMessages(sendingMode, messages.stream().map(Entity::getId).collect(Collectors.toList()));
         return messages.stream().map(e -> new MessageVO(e, receivers.getOrDefault(e.getId(), Collections.emptyList()))).collect(Collectors.toList());
+    }
+
+    @Override
+    public MessageMapper getBaseMapper() {
+        return baseMapper;
     }
 }

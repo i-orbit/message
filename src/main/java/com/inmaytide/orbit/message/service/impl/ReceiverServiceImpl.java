@@ -1,8 +1,8 @@
 package com.inmaytide.orbit.message.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.inmaytide.exception.web.BadRequestException;
-import com.inmaytide.orbit.commons.business.impl.BasicServiceImpl;
 import com.inmaytide.orbit.commons.constants.MessageReadingStatus;
 import com.inmaytide.orbit.commons.constants.MessageSendingMode;
 import com.inmaytide.orbit.commons.constants.MessageSendingStatus;
@@ -26,12 +26,15 @@ import java.util.stream.Collectors;
  * @since 2024/2/29
  */
 @Service
-public class ReceiverServiceImpl extends BasicServiceImpl<MessageReceiverMapper, MessageReceiver> implements ReceiverService {
+public class ReceiverServiceImpl implements ReceiverService {
 
     private final ApplicationProperties properties;
 
-    public ReceiverServiceImpl(ApplicationProperties properties) {
+    private final MessageReceiverMapper baseMapper;
+
+    public ReceiverServiceImpl(ApplicationProperties properties, MessageReceiverMapper baseMapper) {
         this.properties = properties;
+        this.baseMapper = baseMapper;
     }
 
     @Override
@@ -54,8 +57,8 @@ public class ReceiverServiceImpl extends BasicServiceImpl<MessageReceiverMapper,
             if (e.getSendingMode() == MessageSendingMode.MAIL || e.getSendingMode() == MessageSendingMode.SMS) {
                 e.setReadingStatus(MessageReadingStatus.READED);
             }
+            baseMapper.insert(e);
         });
-        saveBatch(receivers);
     }
 
     @Override
@@ -83,5 +86,10 @@ public class ReceiverServiceImpl extends BasicServiceImpl<MessageReceiverMapper,
                     });
         });
         return baseMapper.selectList(wrapper).stream().collect(Collectors.groupingBy(MessageReceiver::getMessageId, Collectors.toList()));
+    }
+
+    @Override
+    public BaseMapper<MessageReceiver> getBaseMapper() {
+        return baseMapper;
     }
 }
